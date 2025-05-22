@@ -19,18 +19,28 @@ class MyApp extends StatelessWidget {
 
 class Post {
   final int id;
-  final String imie;
-  final String nazwisko;
-  final String pokoj;
-  final String tytul;
-  final String telefon;
-  final String budynek;
-  final String mail;
-  final String konsultacje;
-  final String linkDoSerwisuUsos;
+  final String? imie;
+  final String? nazwisko;
+  final String? pokoj;
+  final String? tytul;
+  final String? telefon;
+  final String? budynek;
+  final String? mail;
+  final String? konsultacje;
+  final String? linkDoSerwisuUsos;
 
-
-  Post({required this.id, required this.imie, required this.nazwisko, required this.pokoj, required this.tytul, required this.telefon, required this.budynek, required this.mail, required this.konsultacje, required this.linkDoSerwisuUsos});
+  Post({
+    required this.id,
+    this.imie,
+    this.nazwisko,
+    this.pokoj,
+    this.tytul,
+    this.telefon,
+    this.budynek,
+    this.mail,
+    this.konsultacje,
+    this.linkDoSerwisuUsos,
+  });
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
@@ -95,7 +105,7 @@ class _PostListScreenState extends State<PostListScreen> {
             itemBuilder: (context, index) {
               final post = posts[index];
               return ListTile(
-                title: Text(post.imie),
+                title: Text(post.imie ?? ''),
                 subtitle: Text('ID: ${post.id}'),
                 onTap: () {
                   Navigator.push(
@@ -119,30 +129,86 @@ class PostDetailScreen extends StatelessWidget {
 
   PostDetailScreen({required this.post});
 
+  Widget _buildInfoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.blue[700],
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            value ?? 'Brak danych',
+            style: TextStyle(fontSize: 16),
+          ),
+          Divider(),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Szczegóły')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Tytuł:', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text(post.imie),
-            SizedBox(height: 16),
-            Text('Treść:', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text(post.nazwisko),
-            Text(post.pokoj),
-            Text(post.tytul),
-            Text(post.telefon),
-            Text(post.budynek),
-            Text(post.mail),
-            Text(post.konsultacje),
-            Text(post.linkDoSerwisuUsos),
-          ],
+      appBar: AppBar(
+        title: Text('Szczegóły'),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildInfoRow('Imię', post.imie),
+              _buildInfoRow('Nazwisko', post.nazwisko),
+              _buildInfoRow('Tytuł', post.tytul),
+              _buildInfoRow('Pokój', post.pokoj),
+              _buildInfoRow('Budynek', post.budynek),
+              _buildInfoRow('Telefon', post.telefon),
+              _buildInfoRow('Email', post.mail),
+              _buildInfoRow('Konsultacje', post.konsultacje),
+              if (post.linkDoSerwisuUsos?.isNotEmpty ?? false)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Link do USOS:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.blue[700],
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      InkWell(
+                        onTap: () {
+                          // TODO: Implement URL launcher
+                        },
+                        child: Text(
+                          post.linkDoSerwisuUsos ?? '',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                      Divider(),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
