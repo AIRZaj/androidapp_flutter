@@ -1,18 +1,126 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'API List Example',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: PostListScreen(),
+    );
+  }
+}
+
+class Post {
+  final int id;
+  final String imie;
+  final String nazwisko;
+
+  Post({required this.id, required this.imie, required this.nazwisko});
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      id: json['id'],
+      imie: json['imie'],
+      nazwisko: json['nazwisko'],
+    );
+  }
+}
+
+class PostListScreen extends StatefulWidget {
+  @override
+  _PostListScreenState createState() => _PostListScreenState();
+}
+
+class _PostListScreenState extends State<PostListScreen> {
+  late Future<List<Post>> _futurePosts;
+
+  Future<List<Post>> fetchPosts() async {
+    final response =
+        await http.get(Uri.parse('https://grupa2.android.mzelent.pl/persons/'));
+
+    if (response.statusCode == 200) {
+      List jsonData = json.decode(response.body);
+      return jsonData.map((item) => Post.fromJson(item)).toList();
+    } else {
+      throw Exception('Błąd podczas pobierania danych');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _futurePosts = fetchPosts();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+    return Scaffold(
+      appBar: AppBar(title: Text('Lista Postów')),
+      body: FutureBuilder<List<Post>>(
+        future: _futurePosts,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Błąd: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('Brak danych'));
+          }
+
+          final posts = snapshot.data!;
+          return ListView.builder(
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              final post = posts[index];
+              return ListTile(
+                title: Text(post.imie),
+                subtitle: Text('ID: ${post.id}'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostDetailScreen(post: post),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class PostDetailScreen extends StatelessWidget {
+  final Post post;
+
+  PostDetailScreen({required this.post});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Szczegóły')),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Tytuł:', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8),
+            Text(post.imie),
+            SizedBox(height: 16),
+            Text('Treść:', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8),
+            Text(post.nazwisko),
+          ],
         ),
       ),
     );
