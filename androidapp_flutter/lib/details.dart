@@ -6,7 +6,7 @@ class PostDetailScreen extends StatelessWidget {
 
   PostDetailScreen({required this.post});
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(String label, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -22,7 +22,7 @@ class PostDetailScreen extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            value,
+            value ?? 'Brak danych',
             style: TextStyle(fontSize: 16),
           ),
           Divider(),
@@ -52,7 +52,7 @@ class PostDetailScreen extends StatelessWidget {
               _buildInfoRow('Telefon', post.telefon),
               _buildInfoRow('Email', post.mail),
               _buildInfoRow('Konsultacje', post.konsultacje),
-              if (post.linkDoSerwisuUsos.isNotEmpty)
+              if (post.linkDoSerwisuUsos?.isNotEmpty ?? false)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Column(
@@ -72,7 +72,7 @@ class PostDetailScreen extends StatelessWidget {
                           // TODO: Implement URL launcher
                         },
                         child: Text(
-                          post.linkDoSerwisuUsos,
+                          post.linkDoSerwisuUsos ?? '',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.blue,
