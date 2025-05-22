@@ -21,14 +21,29 @@ class Post {
   final int id;
   final String imie;
   final String nazwisko;
+  final String pokoj;
+  final String tytul;
+  final String telefon;
+  final String budynek;
+  final String mail;
+  final String konsultacje;
+  final String linkDoSerwisuUsos;
 
-  Post({required this.id, required this.imie, required this.nazwisko});
+
+  Post({required this.id, required this.imie, required this.nazwisko, required this.pokoj, required this.tytul, required this.telefon, required this.budynek, required this.mail, required this.konsultacje, required this.linkDoSerwisuUsos});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
       imie: json['imie'],
       nazwisko: json['nazwisko'],
+      pokoj: json['pokoj'],
+      tytul: json['tytul'],
+      telefon: json['telefon'],
+      budynek: json['budynek'],
+      mail: json['mail'],
+      konsultacje: json['konsultacje'],
+      linkDoSerwisuUsos: json['link_do_serwisu_usos'],
     );
   }
 }
@@ -120,6 +135,13 @@ class PostDetailScreen extends StatelessWidget {
             Text('Treść:', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
             Text(post.nazwisko),
+            Text(post.pokoj),
+            Text(post.tytul),
+            Text(post.telefon),
+            Text(post.budynek),
+            Text(post.mail),
+            Text(post.konsultacje),
+            Text(post.linkDoSerwisuUsos),
           ],
         ),
       ),
