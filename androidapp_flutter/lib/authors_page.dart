@@ -16,39 +16,50 @@ class AuthorsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Authors'),
-        backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          _buildAuthorCard(
-            context,
-            'Szymon Nadbrzezny',
-            'https://github.com/SzymonNadbrzezny',
-            'https://github.com/SzymonNadbrzezny.png',
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              Colors.white,
+            ],
           ),
-          const SizedBox(height: 16),
-          _buildAuthorCard(
-            context,
-            'Jakub Nieścior',
-            'https://github.com/jaknie10',
-            'https://github.com/jaknie10.png',
-          ),
-          const SizedBox(height: 16),
-          _buildAuthorCard(
-            context,
-            'Patryk Chachuła',
-            'https://github.com/patchaq',
-            'https://github.com/patchaq.png',
-          ),
-          const SizedBox(height: 16),
-          _buildAuthorCard(
-            context,
-            'Rafał Kiljan',
-            'https://github.com/RafalKiljan',
-            'https://github.com/RafalKiljan.png',
-          ),
-        ],
+        ),
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: [
+            _buildAuthorCard(
+              context,
+              'Szymon Nadbrzeżny',
+              'https://github.com/SzymonNadbrzezny',
+              'https://github.com/SzymonNadbrzezny.png',
+            ),
+            const SizedBox(height: 16),
+            _buildAuthorCard(
+              context,
+              'Jakub Niemir',
+              'https://github.com/jaknie10',
+              'https://github.com/jaknie10.png',
+            ),
+            const SizedBox(height: 16),
+            _buildAuthorCard(
+              context,
+              'Patryk Czarnecki',
+              'https://github.com/patchaq',
+              'https://github.com/patchaq.png',
+            ),
+            const SizedBox(height: 16),
+            _buildAuthorCard(
+              context,
+              'Rafał Kiljan',
+              'https://github.com/RafalKiljan',
+              'https://github.com/RafalKiljan.png',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -67,38 +78,51 @@ class AuthorsPage extends StatelessWidget {
       child: InkWell(
         onTap: () => _launchURL(githubUrl),
         borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage: NetworkImage(avatarUrl),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'GitHub Profile',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                    ),
-                  ],
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  child: CircleAvatar(
+                    radius: 38,
+                    backgroundImage: NetworkImage(avatarUrl),
+                  ),
                 ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Theme.of(context).primaryColor,
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'GitHub Profile',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ],
+            ),
           ),
         ),
       ),
