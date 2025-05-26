@@ -62,7 +62,7 @@ class Post {
 }
 
 class PostListScreen extends StatefulWidget {
-  const PostListScreen({Key? key}) : super(key: key);
+  const PostListScreen({super.key});
 
   @override
   _PostListScreenState createState() => _PostListScreenState();
@@ -81,7 +81,19 @@ class _PostListScreenState extends State<PostListScreen> {
       List jsonData = json.decode(response.body);
       return jsonData.map((item) => Post.fromJson(item)).toList();
     } else {
-      throw Exception('Błąd podczas pobierania danych');
+      // Return 10 mock data records in case of error
+      return List.generate(10, (index) => Post.fromJson({
+        'id': index,
+        'imie': 'Mock Imie $index',
+        'nazwisko': 'Mock Nazwisko $index',
+        'pokoj': 'Mock Pokoj $index',
+        'tytul': 'Mock Tytul $index',
+        'telefon': 'Mock Telefon $index',
+        'budynek': 'Mock Budynek $index',
+        'mail': 'Mock Mail $index',
+        'konsultacje': 'Mock Konsultacje $index',
+        'link_do_serwisu_usos': 'Mock Link $index',
+      }));
     }
   }
 
