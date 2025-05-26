@@ -4,7 +4,7 @@ import 'PeopleList.dart';
 class PostDetailScreen extends StatelessWidget {
   final Post post;
 
-  PostDetailScreen({required this.post});
+  const PostDetailScreen({super.key, required this.post});
 
   Widget _buildInfoRow(String label, String? value) {
     return Padding(
