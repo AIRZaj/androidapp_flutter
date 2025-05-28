@@ -129,7 +129,7 @@ class _PostListScreenState extends State<PostListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista Postów')),
+      appBar: AppBar(title: const Text('Książka Adresowa')),
       body: FutureBuilder<List<Post>>(
         future: _futurePosts,
         builder: (context, snapshot) {

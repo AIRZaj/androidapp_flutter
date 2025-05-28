@@ -1,5 +1,6 @@
+import 'package:androidapp_flutter/PeopleList.dart';
+import 'package:androidapp_flutter/map.dart';
 import 'package:flutter/material.dart';
-import 'PeopleList.dart';
 import 'authors_page.dart';
 
 void main() {
@@ -76,32 +77,54 @@ class MyApp extends StatelessWidget {
           color: Color(0xFF003366), // UAM niebieski
         ),
       ),
-      home: const MainScreen(),
+      home: MainScreen(),
     );
   }
 }
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    PostListScreen(),
+    MapScreen(),
+    AuthorsPage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Książka adresowa UAM Fizyka'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.people),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AuthorsPage()),
-              );
-            },
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Map',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Authors',
           ),
         ],
       ),
-      body: const PostListScreen(),
     );
   }
+
 }
