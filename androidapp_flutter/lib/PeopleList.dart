@@ -45,7 +45,7 @@ class Post {
 }
 
 class PostListScreen extends StatefulWidget {
-  const PostListScreen({Key? key}) : super(key: key);
+  const PostListScreen({super.key});
 
   @override
   _PostListScreenState createState() => _PostListScreenState();
@@ -54,15 +54,38 @@ class PostListScreen extends StatefulWidget {
 class _PostListScreenState extends State<PostListScreen> {
   late Future<List<Post>> _futurePosts;
 
-  Future<List<Post>> fetchPosts() async {
-    final response =
-        await http.get(Uri.parse('https://grupa2.android.mzelent.pl/persons/'));
+  // 🔄 PRZEŁĄCZNIK trybu działania
+  final bool mockMode = true;
 
-    if (response.statusCode == 200) {
-      List jsonData = json.decode(response.body);
-      return jsonData.map((item) => Post.fromJson(item)).toList();
+  Future<List<Post>> fetchPosts() async {
+    if (mockMode) {
+      // 🔧 Tryb testowy – dane na sztywno
+      return Future.delayed(const Duration(seconds: 1), () {
+        return [
+          Post(
+            id: 1,
+            imie: 'Jan',
+            nazwisko: 'Kowalski',
+            pokoj: '123',
+            tytul: 'Dr',
+            telefon: '123456789',
+            budynek: 'A',
+            mail: 'jan.kowalski@example.com',
+            konsultacje: 'Poniedziałek 10:00-12:00',
+            linkDoSerwisuUsos: 'https://usosweb.example.com',
+          ),
+        ];
+      });
     } else {
-      throw Exception('Błąd podczas pobierania danych');
+      // 🌐 Tryb produkcyjny – zapytanie HTTP
+      final response = await http.get(Uri.parse('https://grupa2.android.mzelent.pl/persons/'));
+
+      if (response.statusCode == 200) {
+        List jsonData = json.decode(response.body);
+        return jsonData.map((item) => Post.fromJson(item)).toList();
+      } else {
+        throw Exception('Błąd podczas pobierania danych');
+      }
     }
   }
 
