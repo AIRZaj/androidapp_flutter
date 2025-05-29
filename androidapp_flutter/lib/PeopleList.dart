@@ -73,13 +73,28 @@ class _PostListScreenState extends State<PostListScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<Post> _filteredPosts = [];
 
-  Future<List<Post>> fetchPosts() async {
-    final response =
-        await http.get(Uri.parse('https://grupa2.android.mzelent.pl/persons/'));
+  // 🔄 PRZEŁĄCZNIK trybu działania
+  final bool mockMode = true;
 
-    if (response.statusCode == 200) {
-      List jsonData = json.decode(response.body);
-      return jsonData.map((item) => Post.fromJson(item)).toList();
+  Future<List<Post>> fetchPosts() async {
+    if (mockMode) {
+      // 🔧 Tryb testowy – dane na sztywno
+      return Future.delayed(const Duration(seconds: 1), () {
+        return [
+          Post(
+            id: 1,
+            imie: 'Jan',
+            nazwisko: 'Kowalski',
+            pokoj: '123',
+            tytul: 'Dr',
+            telefon: '123456789',
+            budynek: 'A',
+            mail: 'jan.kowalski@example.com',
+            konsultacje: 'Poniedziałek 10:00-12:00',
+            linkDoSerwisuUsos: 'https://usosweb.example.com',
+          ),
+        ];
+      });
     } else {
       // Return 10 mock data records in case of error
       return List.generate(10, (index) => Post.fromJson({
