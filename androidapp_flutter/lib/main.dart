@@ -1,4 +1,5 @@
-import 'package:androidapp_flutter/PeopleList.dart';
+import 'package:androidapp_flutter/news.dart';
+import 'package:androidapp_flutter/people_list.dart';
 import 'package:androidapp_flutter/map.dart';
 import 'package:flutter/material.dart';
 import 'authors_page.dart';
@@ -92,7 +93,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [PostListScreen(), MapScreen(), AuthorsPage()];
+  final List<Widget> _pages = [
+    PostListScreen(),
+    MapScreen(),
+    AuthorsPage(),
+    NewsScreen()
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -119,6 +125,10 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Authors',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.newspaper),
+            label: 'Aktualności',
           ),
         ],
       ),

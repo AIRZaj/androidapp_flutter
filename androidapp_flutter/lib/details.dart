@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'PeopleList.dart';
+import 'people_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostDetailScreen extends StatelessWidget {
