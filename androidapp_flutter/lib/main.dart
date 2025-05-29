@@ -21,11 +21,9 @@ class MyApp extends StatelessWidget {
           primary: const Color(0xFF003366), // UAM niebieski
           secondary: const Color(0xFF0066CC), // UAM jasny niebieski
           tertiary: const Color(0xFFCC0000), // UAM czerwony
-          background: Colors.white,
           surface: Colors.white,
           onPrimary: Colors.white,
           onSecondary: Colors.white,
-          onBackground: const Color(0xFF003366),
           onSurface: const Color(0xFF003366),
           error: const Color(0xFFCC0000), // UAM czerwony
         ),
@@ -87,7 +85,7 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {

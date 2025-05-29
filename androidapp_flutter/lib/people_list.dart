@@ -65,7 +65,7 @@ class PostListScreen extends StatefulWidget {
   const PostListScreen({super.key});
 
   @override
-  _PostListScreenState createState() => _PostListScreenState();
+  State<PostListScreen> createState() => _PostListScreenState();
 }
 
 class _PostListScreenState extends State<PostListScreen> {
