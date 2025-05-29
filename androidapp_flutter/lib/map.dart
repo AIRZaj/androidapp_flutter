@@ -54,8 +54,9 @@ class MapScreen extends StatelessWidget {
     return FutureBuilder<LocationData>(
       future: getUserLocation(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
+        if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
+        }
 
         final user = snapshot.data!;
         final userOffset = gpsToOffset(
