@@ -179,7 +179,7 @@ class _PostListScreenState extends State<PostListScreen> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Szukaj...',
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -194,7 +194,7 @@ class _PostListScreenState extends State<PostListScreen> {
                     final post = _filteredPosts[index];
                     return Container(
                       margin:
-                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade300),
                         borderRadius: BorderRadius.circular(8.0),

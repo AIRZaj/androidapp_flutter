@@ -73,10 +73,10 @@ class PostDetailScreen extends StatelessWidget {
                 border: Border.all(
                     color: const Color.fromARGB(255, 0, 45, 105), width: 3),
               ),
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 radius: 50,
                 backgroundImage:
-                    const AssetImage('assets/avatar_placeholder.png'),
+                    AssetImage('assets/avatar_placeholder.png'),
               ),
             ),
 
@@ -146,29 +146,38 @@ class PostDetailScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        if (post.telefon != null && post.telefon!.isNotEmpty)
-                          IconButton(
-                            icon: const Icon(Icons.phone),
-                            color: const Color.fromARGB(255, 0, 45, 105),
-                            iconSize: 30,
-                            onPressed: () => _launchUrl('tel:${post.telefon}',
-                                mode: LaunchMode.platformDefault),
-                          ),
-                        if (post.telefon != null && post.telefon!.isNotEmpty)
+                        IconButton(
+                          icon: const Icon(Icons.phone),
+                          color: (post.telefon != null && post.telefon!.isNotEmpty)
+                              ? const Color.fromARGB(255, 0, 45, 105)
+                              : Colors.grey,
+                          iconSize: 30,
+                          onPressed: (post.telefon != null && post.telefon!.isNotEmpty)
+                              ? () => _launchUrl('tel:${post.telefon}',
+                                  mode: LaunchMode.platformDefault)
+                              : null,
+                        ),  
                           IconButton(
                             icon: const Icon(Icons.message),
-                            color: const Color.fromARGB(255, 0, 45, 105),
+                            color: (post.telefon != null && post.telefon!.isNotEmpty)
+                                ? const Color.fromARGB(255, 0, 45, 105)
+                                : Colors.grey,
                             iconSize: 30,
-                            onPressed: () => _launchUrl('sms:${post.telefon}',
-                                mode: LaunchMode.platformDefault),
+                            onPressed: (post.telefon != null && post.telefon!.isNotEmpty)
+                                ? () => _launchUrl('sms:${post.telefon}',
+                                    mode: LaunchMode.platformDefault)
+                                : null,
                           ),
-                        if (post.mail != null && post.mail!.isNotEmpty)
-                          IconButton(
+                           IconButton(
                             icon: const Icon(Icons.email),
-                            color: const Color.fromARGB(255, 0, 45, 105),
+                            color: (post.mail != null && post.mail!.isNotEmpty)
+                                ? const Color.fromARGB(255, 0, 45, 105)
+                                : Colors.grey,
                             iconSize: 30,
-                            onPressed: () => _launchUrl('mailto:${post.mail}',
-                                mode: LaunchMode.platformDefault),
+                            onPressed: (post.mail != null && post.mail!.isNotEmpty)
+                                ? () => _launchUrl('mailto:${post.mail}',
+                                    mode: LaunchMode.platformDefault)
+                                : null,
                           ),
                       ],
                     ),

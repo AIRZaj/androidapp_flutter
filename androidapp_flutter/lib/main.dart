@@ -77,11 +77,11 @@ class MyApp extends StatelessWidget {
         ),
         menuTheme: const MenuThemeData(
           style: MenuStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.white),
+            backgroundColor: WidgetStatePropertyAll(Colors.white),
           ),
         ),
       ),
-      home: MainScreen(),
+      home: const MainScreen(),
     );
   }
 }
@@ -97,10 +97,10 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    PostListScreen(),
+    const PostListScreen(),
     MapScreen(),
-    AuthorsPage(),
-    NewsScreen()
+    const AuthorsPage(),
+    const NewsScreen()
   ];
 
   void _onItemTapped(int index) {
