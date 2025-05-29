@@ -210,28 +210,31 @@ class NewsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (item.imageUrl.isNotEmpty && item.imageUrl != 'null' && item.imageUrl.startsWith('http'))
-                      CachedNetworkImage(
-                        imageUrl: item.imageUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 200,
-                        placeholder: (context, url) => Container(
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: CachedNetworkImage(
+                          imageUrl: item.imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
                           height: 200,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: CircularProgressIndicator(),
+                          placeholder: (context, url) => Container(
+                            height: 200,
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          height: 200,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(Icons.error),
+                          errorWidget: (context, url, error) => Container(
+                            height: 200,
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: Icon(Icons.error),
+                            ),
                           ),
                         ),
                       ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
