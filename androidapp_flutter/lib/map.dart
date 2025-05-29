@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'dart:async';
 
 final location = Location();
 
@@ -35,8 +36,15 @@ Offset gpsToOffset(
   return Offset(dx, dy);
 }
 
-class MapScreen extends StatelessWidget {
-  final String mapAssetPath = 'assets/my_map.png'; // dodaj do pubspec.yaml
+class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  final String mapAssetPath = 'assets/my_map.png';
   final double mapWidth = 761;
   final double mapHeight = 951;
 
@@ -45,48 +53,75 @@ class MapScreen extends StatelessWidget {
   final double bottomRightLat = 52.46528829827169;
   final double bottomRightLon = 16.931344155155415;
 
+  Timer? _locationTimer;
+  LocationData? _currentLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    _startLocationUpdates();
+  }
+
+  @override
+  void dispose() {
+    _locationTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startLocationUpdates() {
+    // Get initial location
+    getUserLocation().then((location) {
+      setState(() {
+        _currentLocation = location;
+      });
+    });
+
+    // Set up periodic updates
+    _locationTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      getUserLocation().then((location) {
+        setState(() {
+          _currentLocation = location;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final scale = screenSize.width / mapWidth;
     final scaledHeight = mapHeight * scale;
 
-    return FutureBuilder<LocationData>(
-      future: getUserLocation(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return const Center(child: CircularProgressIndicator());
+    if (_currentLocation == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-        final user = snapshot.data!;
-        final userOffset = gpsToOffset(
-          user.latitude!,
-          user.longitude!,
-          topLeftLat,
-          topLeftLon,
-          bottomRightLat,
-          bottomRightLon,
-          mapWidth,
-          mapHeight,
-        );
+    final userOffset = gpsToOffset(
+      _currentLocation!.latitude!,
+      _currentLocation!.longitude!,
+      topLeftLat,
+      topLeftLon,
+      bottomRightLat,
+      bottomRightLon,
+      mapWidth,
+      mapHeight,
+    );
 
-        return Center(
-          child: SizedBox(
-            width: screenSize.width,
-            height: scaledHeight,
-            child: Stack(
-              children: [
-                Image.asset(mapAssetPath, fit: BoxFit.fill),
-                Positioned(
-                  left: userOffset.dx * scale - 12,
-                  top: userOffset.dy * scale - 12,
-                  child: const Icon(Icons.location_on,
-                      color: Colors.red, size: 24),
-                ),
-              ],
+    return Center(
+      child: SizedBox(
+        width: screenSize.width,
+        height: scaledHeight,
+        child: Stack(
+          children: [
+            Image.asset(mapAssetPath, fit: BoxFit.fill),
+            Positioned(
+              left: userOffset.dx * scale,
+              top: userOffset.dy * scale,
+              child: const Icon(Icons.location_on, color: Colors.red, size: 24),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }
