@@ -13,7 +13,8 @@ Future<LocationData> getUserLocation() async {
   PermissionStatus permissionGranted = await location.hasPermission();
   if (permissionGranted == PermissionStatus.denied) {
     permissionGranted = await location.requestPermission();
-    if (permissionGranted != PermissionStatus.granted) throw Exception('Permission denied');
+    if (permissionGranted != PermissionStatus.granted)
+      throw Exception('Permission denied');
   }
 
   return await location.getLocation();
@@ -46,10 +47,15 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final scale = screenSize.width / mapWidth;
+    final scaledHeight = mapHeight * scale;
+
     return FutureBuilder<LocationData>(
       future: getUserLocation(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData)
+          return const Center(child: CircularProgressIndicator());
 
         final user = snapshot.data!;
         final userOffset = gpsToOffset(
@@ -65,15 +71,16 @@ class MapScreen extends StatelessWidget {
 
         return Center(
           child: SizedBox(
-            width: mapWidth,
-            height: mapHeight,
+            width: screenSize.width,
+            height: scaledHeight,
             child: Stack(
               children: [
                 Image.asset(mapAssetPath, fit: BoxFit.fill),
                 Positioned(
-                  left: userOffset.dx - 8,
-                  top: userOffset.dy - 8,
-                  child: Icon(Icons.location_on, color: Colors.red, size: 24),
+                  left: userOffset.dx * scale - 12,
+                  top: userOffset.dy * scale - 12,
+                  child: const Icon(Icons.location_on,
+                      color: Colors.red, size: 24),
                 ),
               ],
             ),
