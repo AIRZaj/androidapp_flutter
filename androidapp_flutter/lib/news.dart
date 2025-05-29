@@ -33,7 +33,8 @@ class NewsItem {
 }
 
 Future<List<NewsItem>> fetchNews() async {
-  final response = await http.get(Uri.parse('https://wanatowka.pl/kiosk/api_client.php/'));
+  final response =
+      await http.get(Uri.parse('https://wanatowka.pl/kiosk/api_client.php/'));
 
   if (response.statusCode == 200) {
     final List<dynamic> data = json.decode(response.body);
@@ -44,7 +45,7 @@ Future<List<NewsItem>> fetchNews() async {
 }
 
 class NewsScreen extends StatelessWidget {
-  const NewsScreen({Key? key}) : super(key: key);
+  const NewsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +73,13 @@ class NewsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (item.imageUrl.isNotEmpty)
-                      Image.network(item.imageUrl),
+                    if (item.imageUrl.isNotEmpty) Image.network(item.imageUrl),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         item.title,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                     if (item.subtitle.isNotEmpty)
