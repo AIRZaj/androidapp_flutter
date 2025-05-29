@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NewsItem {
   final int id;
@@ -10,6 +11,7 @@ class NewsItem {
   final String title;
   final String subtitle;
   final String imageUrl;
+  final String content;
 
   NewsItem({
     required this.id,
@@ -18,16 +20,29 @@ class NewsItem {
     required this.title,
     required this.subtitle,
     required this.imageUrl,
+    required this.content,
   });
 
   factory NewsItem.fromJson(Map<String, dynamic> json) {
+    String normalizeTitle(String title) {
+      if (title.isEmpty) return '';
+      return title[0].toUpperCase() + title.substring(1).toLowerCase();
+    }
+
+    String tresc = json['tresc'] ?? '';
+    bool isImage = tresc.toLowerCase().endsWith('.jpg') ||
+        tresc.toLowerCase().endsWith('.jpeg') ||
+        tresc.toLowerCase().endsWith('.png') ||
+        tresc.toLowerCase().endsWith('.gif');
+
     return NewsItem(
       id: json['id'],
       category: json['cat'] ?? '',
       date: json['data_pub'] ?? '',
-      title: json['lw_1'] ?? '',
+      title: normalizeTitle(json['lw_1'] ?? ''),
       subtitle: json['lw_2'] ?? '',
-      imageUrl: json['tresc_1'] ?? '',
+      imageUrl: isImage ? tresc : (json['tresc_1'] ?? ''),
+      content: isImage ? '' : tresc,
     );
   }
 }
@@ -37,10 +52,91 @@ Future<List<NewsItem>> fetchNews() async {
       await http.get(Uri.parse('https://wanatowka.pl/kiosk/api_client.php/'));
 
   if (response.statusCode == 200) {
-    final List<dynamic> jsonData = json.decode(response.body);
-    return jsonData.map((item) => NewsItem.fromJson(item)).toList();
+    final Map<String, dynamic> jsonData = json.decode(response.body);
+    final List<dynamic> newsList = jsonData['news'] ?? [];
+    return newsList.map((item) => NewsItem.fromJson(item)).toList();
   } else {
     throw Exception('Failed to load data');
+  }
+}
+
+class NewsDetailScreen extends StatelessWidget {
+  final NewsItem newsItem;
+
+  const NewsDetailScreen({super.key, required this.newsItem});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(newsItem.title),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (newsItem.imageUrl.isNotEmpty)
+              CachedNetworkImage(
+                imageUrl: newsItem.imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 200,
+                placeholder: (context, url) => Container(
+                  height: 200,
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  height: 200,
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: Icon(Icons.error),
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    newsItem.title,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  if (newsItem.subtitle.isNotEmpty)
+                    Text(
+                      newsItem.subtitle,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  const SizedBox(height: 16),
+                  Text(
+                    newsItem.content,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Data: ${newsItem.date}',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -70,31 +166,68 @@ class NewsScreen extends StatelessWidget {
 
               return Card(
                 margin: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (item.imageUrl.isNotEmpty) Image.network(item.imageUrl),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        item.title,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    if (item.subtitle.isNotEmpty)
+                child: InkWell(
+                  onTap: () {
+                    if (item.content.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NewsDetailScreen(newsItem: item),
+                        ),
+                      );
+                    }
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (item.imageUrl.isNotEmpty && item.imageUrl != 'null')
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12)),
+                          child: CachedNetworkImage(
+                            imageUrl: item.imageUrl,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 200,
+                            placeholder: (context, url) => Container(
+                              height: 200,
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              height: 200,
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: Icon(Icons.error),
+                              ),
+                            ),
+                          ),
+                        ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(item.subtitle),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          item.title,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Data: ${item.date}',
-                        style: const TextStyle(color: Colors.grey),
+                      if (item.subtitle.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(item.subtitle),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Data: ${item.date}',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

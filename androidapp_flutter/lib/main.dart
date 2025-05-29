@@ -118,6 +118,10 @@ class _MainScreenState extends State<MainScreen> {
         onTap: _onItemTapped,
         selectedItemColor: const Color(0xFF003366), // UAM niebieski
         unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType
+            .fixed, // Use fixed type for better performance
+        elevation: 8, // Add elevation for better visual hierarchy
+        backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
