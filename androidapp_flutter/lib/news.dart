@@ -29,11 +29,36 @@ class NewsItem {
       return title[0].toUpperCase() + title.substring(1).toLowerCase();
     }
 
-    String tresc = json['tresc'] ?? '';
-    bool isImage = tresc.toLowerCase().endsWith('.jpg') ||
-        tresc.toLowerCase().endsWith('.jpeg') ||
-        tresc.toLowerCase().endsWith('.png') ||
-        tresc.toLowerCase().endsWith('.gif');
+    String buildContent(Map<String, dynamic> json) {
+      String content = '';
+      int index = 1;
+      while (true) {
+        String key = 'tresc_$index';
+        if (!json.containsKey(key)) break;
+
+        String part = json[key] ?? '';
+        if (index == 1 &&
+            (part.toLowerCase().endsWith('.jpg') ||
+                part.toLowerCase().endsWith('.jpeg') ||
+                part.toLowerCase().endsWith('.png') ||
+                part.toLowerCase().endsWith('.gif'))) {
+          index++;
+          continue;
+        }
+        if (part.isNotEmpty) {
+          content += "$part\n\n";
+        }
+        index++;
+      }
+      return content;
+    }
+
+    String content = buildContent(json);
+    String imageUrl = json['tresc_1'] ?? '';
+    bool isImage = imageUrl.toLowerCase().endsWith('.jpg') ||
+        imageUrl.toLowerCase().endsWith('.jpeg') ||
+        imageUrl.toLowerCase().endsWith('.png') ||
+        imageUrl.toLowerCase().endsWith('.gif');
 
     return NewsItem(
       id: json['id'],
@@ -41,8 +66,8 @@ class NewsItem {
       date: json['data_pub'] ?? '',
       title: normalizeTitle(json['lw_1'] ?? ''),
       subtitle: json['lw_2'] ?? '',
-      imageUrl: isImage ? tresc : (json['tresc_1'] ?? ''),
-      content: isImage ? '' : tresc,
+      imageUrl: isImage ? imageUrl : '',
+      content: content,
     );
   }
 }
@@ -75,7 +100,9 @@ class NewsDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (newsItem.imageUrl.isNotEmpty)
+            if (newsItem.imageUrl.isNotEmpty &&
+                newsItem.imageUrl != 'null' &&
+                newsItem.imageUrl.startsWith('http'))
               CachedNetworkImage(
                 imageUrl: newsItem.imageUrl,
                 fit: BoxFit.cover,
@@ -143,6 +170,114 @@ class NewsDetailScreen extends StatelessWidget {
 class NewsScreen extends StatelessWidget {
   const NewsScreen({super.key});
 
+  void _showNewsDetails(BuildContext context, NewsItem item) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.4,
+        minChildSize: 0.2,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (item.imageUrl.isNotEmpty && item.imageUrl != 'null' && item.imageUrl.startsWith('http'))
+                      CachedNetworkImage(
+                        imageUrl: item.imageUrl,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 200,
+                        placeholder: (context, url) => Container(
+                          height: 200,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          height: 200,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: Icon(Icons.error),
+                          ),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.title,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (item.subtitle.isNotEmpty)
+                            Text(
+                              item.subtitle,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          const SizedBox(height: 16),
+                          Text(
+                            item.content,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Data: ${item.date}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,21 +302,13 @@ class NewsScreen extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.all(8.0),
                 child: InkWell(
-                  onTap: () {
-                    if (item.content.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              NewsDetailScreen(newsItem: item),
-                        ),
-                      );
-                    }
-                  },
+                  onTap: () => _showNewsDetails(context, item),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (item.imageUrl.isNotEmpty && item.imageUrl != 'null')
+                      if (item.imageUrl.isNotEmpty &&
+                          item.imageUrl != 'null' &&
+                          item.imageUrl.startsWith('http'))
                         ClipRRect(
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(12)),
