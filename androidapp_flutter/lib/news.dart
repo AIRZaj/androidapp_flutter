@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:photo_view/photo_view.dart';
 
 class NewsItem {
   final int id;
@@ -212,23 +213,51 @@ class NewsScreen extends StatelessWidget {
                     if (item.imageUrl.isNotEmpty && item.imageUrl != 'null' && item.imageUrl.startsWith('http'))
                       Container(
                         margin: const EdgeInsets.only(bottom: 16),
-                        child: CachedNetworkImage(
-                          imageUrl: item.imageUrl,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 200,
-                          placeholder: (context, url) => Container(
-                            height: 200,
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            height: 200,
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: Icon(Icons.error),
+                        height: 200,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Scaffold(
+                                  appBar: AppBar(
+                                    backgroundColor: Colors.black,
+                                    iconTheme: const IconThemeData(color: Colors.white),
+                                  ),
+                                  body: Container(
+                                    color: Colors.black,
+                                    child: PhotoView(
+                                      imageProvider: CachedNetworkImageProvider(item.imageUrl),
+                                      minScale: PhotoViewComputedScale.contained,
+                                      maxScale: PhotoViewComputedScale.covered * 2,
+                                      backgroundDecoration: const BoxDecoration(color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: 'news_image_${item.id}',
+                            child: CachedNetworkImage(
+                              imageUrl: item.imageUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 200,
+                              placeholder: (context, url) => Container(
+                                height: 200,
+                                color: Colors.grey[200],
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                height: 200,
+                                color: Colors.grey[200],
+                                child: const Center(
+                                  child: Icon(Icons.error),
+                                ),
+                              ),
                             ),
                           ),
                         ),
