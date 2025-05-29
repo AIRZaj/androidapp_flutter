@@ -83,6 +83,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -90,11 +92,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    PostListScreen(),
-    MapScreen(),
-    AuthorsPage()
-  ];
+  final List<Widget> _pages = [PostListScreen(), MapScreen(), AuthorsPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -126,5 +124,4 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-
 }

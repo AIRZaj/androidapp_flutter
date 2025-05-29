@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AuthorsPage extends StatelessWidget {
-  const AuthorsPage({Key? key}) : super(key: key);
+  const AuthorsPage({super.key});
 
   Future<void> _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
@@ -92,7 +92,8 @@ class AuthorsPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.1),
                   child: CircleAvatar(
                     radius: 38,
                     backgroundImage: NetworkImage(avatarUrl),
@@ -128,4 +129,4 @@ class AuthorsPage extends StatelessWidget {
       ),
     );
   }
-} 
+}

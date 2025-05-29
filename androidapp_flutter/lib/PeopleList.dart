@@ -74,7 +74,7 @@ class _PostListScreenState extends State<PostListScreen> {
   List<Post> _filteredPosts = [];
 
   // 🔄 PRZEŁĄCZNIK trybu działania
-  final bool mockMode = true;
+  final bool mockMode = false;
 
   Future<List<Post>> fetchPosts() async {
     if (mockMode) {
@@ -96,19 +96,29 @@ class _PostListScreenState extends State<PostListScreen> {
         ];
       });
     } else {
-      // Return 10 mock data records in case of error
-      return List.generate(10, (index) => Post.fromJson({
-        'id': index,
-        'imie': 'Mock Imie $index',
-        'nazwisko': 'Mock Nazwisko $index',
-        'pokoj': 'Mock Pokoj $index',
-        'tytul': 'Mock Tytul $index',
-        'telefon': 'Mock Telefon $index',
-        'budynek': 'Mock Budynek $index',
-        'mail': 'Mock Mail $index',
-        'konsultacje': 'Mock Konsultacje $index',
-        'link_do_serwisu_usos': 'Mock Link $index',
-      }));
+      final response = await http
+          .get(Uri.parse('https://grupa2.android.mzelent.pl/persons/'));
+
+      if (response.statusCode == 200) {
+        List jsonData = json.decode(response.body);
+        return jsonData.map((item) => Post.fromJson(item)).toList();
+      } else {
+        // Return 10 mock data records in case of error
+        return List.generate(
+            10,
+            (index) => Post.fromJson({
+                  'id': index,
+                  'imie': 'Mock Imie $index',
+                  'nazwisko': 'Mock Nazwisko $index',
+                  'pokoj': 'Mock Pokoj $index',
+                  'tytul': 'Mock Tytul $index',
+                  'telefon': 'Mock Telefon $index',
+                  'budynek': 'Mock Budynek $index',
+                  'mail': 'Mock Mail $index',
+                  'konsultacje': 'Mock Konsultacje $index',
+                  'link_do_serwisu_usos': 'Mock Link $index',
+                }));
+      }
     }
   }
 
