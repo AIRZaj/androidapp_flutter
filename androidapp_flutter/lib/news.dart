@@ -36,8 +36,8 @@ Future<List<NewsItem>> fetchNews() async {
   final response = await http.get(Uri.parse('https://wanatowka.pl/kiosk/api_client.php/'));
 
   if (response.statusCode == 200) {
-      List jsonData = json.decode(response.body);
-      return jsonData.map((item) => NewsItem.fromJson(item)).toList();
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => NewsItem.fromJson(json)).toList();
   } else {
     throw Exception('Failed to load news');
   }
