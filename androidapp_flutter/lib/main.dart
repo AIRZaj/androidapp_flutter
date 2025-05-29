@@ -75,6 +75,11 @@ class MyApp extends StatelessWidget {
         iconTheme: const IconThemeData(
           color: Color(0xFF003366), // UAM niebieski
         ),
+        menuTheme: const MenuThemeData(
+          style: MenuStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.white),
+          ),
+        ),
       ),
       home: MainScreen(),
     );
@@ -111,6 +116,8 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedItemColor: const Color(0xFF003366), // UAM niebieski
+        unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
