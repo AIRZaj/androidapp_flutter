@@ -111,13 +111,6 @@ class AuthorsPage extends StatelessWidget {
                         name,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'GitHub Profile',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                      ),
                     ],
                   ),
                 ),

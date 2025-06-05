@@ -98,9 +98,9 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const PostListScreen(),
-    MapScreen(),
+    const MapScreen(),
+    const NewsScreen(),
     const AuthorsPage(),
-    const NewsScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -132,12 +132,12 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Map',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Authors',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.newspaper),
             label: 'Aktualności',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Authors',
           ),
         ],
       ),

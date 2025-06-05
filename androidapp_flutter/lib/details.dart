@@ -63,22 +63,22 @@ class PostDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
 
-            // Avatar z ramką
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: const Color.fromARGB(255, 0, 45, 105), width: 3),
-              ),
-              child: const CircleAvatar(
-                radius: 50,
-                backgroundImage:
-                    AssetImage('assets/avatar_placeholder.png'),
-              ),
-            ),
+            // // Avatar z ramką
+            // Container(
+            //   padding: const EdgeInsets.all(4),
+            //   decoration: BoxDecoration(
+            //     shape: BoxShape.circle,
+            //     border: Border.all(
+            //         color: const Color.fromARGB(255, 0, 45, 105), width: 3),
+            //   ),
+            //   child: const CircleAvatar(
+            //     radius: 50,
+            //     backgroundImage:
+            //         AssetImage('assets/avatar_placeholder.png'),
+            //   ),
+            // ),
 
             const SizedBox(height: 16),
 
@@ -148,37 +148,42 @@ class PostDetailScreen extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.phone),
-                          color: (post.telefon != null && post.telefon!.isNotEmpty)
+                          color:
+                              (post.telefon != null && post.telefon!.isNotEmpty)
+                                  ? const Color.fromARGB(255, 0, 45, 105)
+                                  : Colors.grey,
+                          iconSize: 30,
+                          onPressed:
+                              (post.telefon != null && post.telefon!.isNotEmpty)
+                                  ? () => _launchUrl('tel:${post.telefon}',
+                                      mode: LaunchMode.platformDefault)
+                                  : null,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.message),
+                          color:
+                              (post.telefon != null && post.telefon!.isNotEmpty)
+                                  ? const Color.fromARGB(255, 0, 45, 105)
+                                  : Colors.grey,
+                          iconSize: 30,
+                          onPressed:
+                              (post.telefon != null && post.telefon!.isNotEmpty)
+                                  ? () => _launchUrl('sms:${post.telefon}',
+                                      mode: LaunchMode.platformDefault)
+                                  : null,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.email),
+                          color: (post.mail != null && post.mail!.isNotEmpty)
                               ? const Color.fromARGB(255, 0, 45, 105)
                               : Colors.grey,
                           iconSize: 30,
-                          onPressed: (post.telefon != null && post.telefon!.isNotEmpty)
-                              ? () => _launchUrl('tel:${post.telefon}',
-                                  mode: LaunchMode.platformDefault)
-                              : null,
-                        ),  
-                          IconButton(
-                            icon: const Icon(Icons.message),
-                            color: (post.telefon != null && post.telefon!.isNotEmpty)
-                                ? const Color.fromARGB(255, 0, 45, 105)
-                                : Colors.grey,
-                            iconSize: 30,
-                            onPressed: (post.telefon != null && post.telefon!.isNotEmpty)
-                                ? () => _launchUrl('sms:${post.telefon}',
-                                    mode: LaunchMode.platformDefault)
-                                : null,
-                          ),
-                           IconButton(
-                            icon: const Icon(Icons.email),
-                            color: (post.mail != null && post.mail!.isNotEmpty)
-                                ? const Color.fromARGB(255, 0, 45, 105)
-                                : Colors.grey,
-                            iconSize: 30,
-                            onPressed: (post.mail != null && post.mail!.isNotEmpty)
-                                ? () => _launchUrl('mailto:${post.mail}',
-                                    mode: LaunchMode.platformDefault)
-                                : null,
-                          ),
+                          onPressed:
+                              (post.mail != null && post.mail!.isNotEmpty)
+                                  ? () => _launchUrl('mailto:${post.mail}',
+                                      mode: LaunchMode.platformDefault)
+                                  : null,
+                        ),
                       ],
                     ),
                   ],
@@ -210,7 +215,7 @@ class PostDetailScreen extends StatelessWidget {
                   leading: const Icon(Icons.link,
                       color: Color.fromARGB(255, 0, 45, 105)),
                   title: const Text('Zobacz profil w USOS'),
-                  subtitle: Text(post.linkDoSerwisuUsos!),
+                  // subtitle: Text(post.linkDoSerwisuUsos!),
                   onTap: () {
                     _launchUrl(post.linkDoSerwisuUsos!);
                   },
