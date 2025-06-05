@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
           elevation: 0,
         ),
-        cardTheme: const CardThemeData(
+        cardTheme: CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
         ),
         menuTheme: const MenuThemeData(
           style: MenuStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.white),
+            backgroundColor: MaterialStatePropertyAll(Colors.white),
           ),
         ),
       ),

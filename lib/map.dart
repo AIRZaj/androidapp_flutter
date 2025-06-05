@@ -14,8 +14,9 @@ Future<LocationData> getUserLocation() async {
   PermissionStatus permissionGranted = await location.hasPermission();
   if (permissionGranted == PermissionStatus.denied) {
     permissionGranted = await location.requestPermission();
-    if (permissionGranted != PermissionStatus.granted)
+    if (permissionGranted != PermissionStatus.granted) {
       throw Exception('Permission denied');
+    }
   }
 
   return await location.getLocation();
