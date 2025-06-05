@@ -190,7 +190,8 @@ class NewsScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Center(
                 child: Container(
@@ -210,7 +211,9 @@ class NewsScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (item.imageUrl.isNotEmpty && item.imageUrl != 'null' && item.imageUrl.startsWith('http'))
+                    if (item.imageUrl.isNotEmpty &&
+                        item.imageUrl != 'null' &&
+                        item.imageUrl.startsWith('http'))
                       Container(
                         margin: const EdgeInsets.only(bottom: 16),
                         height: 200,
@@ -222,15 +225,20 @@ class NewsScreen extends StatelessWidget {
                                 builder: (context) => Scaffold(
                                   appBar: AppBar(
                                     backgroundColor: Colors.black,
-                                    iconTheme: const IconThemeData(color: Colors.white),
+                                    iconTheme: const IconThemeData(
+                                        color: Colors.white),
                                   ),
                                   body: Container(
                                     color: Colors.black,
                                     child: PhotoView(
-                                      imageProvider: CachedNetworkImageProvider(item.imageUrl),
-                                      minScale: PhotoViewComputedScale.contained,
-                                      maxScale: PhotoViewComputedScale.covered * 2,
-                                      backgroundDecoration: const BoxDecoration(color: Colors.black),
+                                      imageProvider: CachedNetworkImageProvider(
+                                          item.imageUrl),
+                                      minScale:
+                                          PhotoViewComputedScale.contained,
+                                      maxScale:
+                                          PhotoViewComputedScale.covered * 2,
+                                      backgroundDecoration: const BoxDecoration(
+                                          color: Colors.black),
                                     ),
                                   ),
                                 ),
@@ -263,9 +271,8 @@ class NewsScreen extends StatelessWidget {
                         ),
                       ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -313,26 +320,34 @@ class NewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Aktualności')),
+      appBar: AppBar(
+        title: const Text('News'),
+      ),
       body: FutureBuilder<List<NewsItem>>(
         future: fetchNews(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Błąd: ${snapshot.error}'));
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Brak aktualności'));
+            return const Center(
+              child: Text('No news available'),
+            );
           }
 
-          final newsList = snapshot.data!;
+          final news = snapshot.data!;
           return ListView.builder(
-            itemCount: newsList.length,
+            itemCount: news.length,
             itemBuilder: (context, index) {
-              final item = newsList[index];
-
+              final item = news[index];
               return Card(
-                margin: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: InkWell(
                   onTap: () => _showNewsDetails(context, item),
                   child: Column(
@@ -341,9 +356,8 @@ class NewsScreen extends StatelessWidget {
                       if (item.imageUrl.isNotEmpty &&
                           item.imageUrl != 'null' &&
                           item.imageUrl.startsWith('http'))
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(12)),
+                        Hero(
+                          tag: 'news_image_${item.id}',
                           child: CachedNetworkImage(
                             imageUrl: item.imageUrl,
                             fit: BoxFit.cover,
@@ -366,23 +380,35 @@ class NewsScreen extends StatelessWidget {
                           ),
                         ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          item.title,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      if (item.subtitle.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(item.subtitle),
-                        ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Data: ${item.date}',
-                          style: const TextStyle(color: Colors.grey),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.title,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            if (item.subtitle.isNotEmpty)
+                              Text(
+                                item.subtitle,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Data: ${item.date}',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
