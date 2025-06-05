@@ -6,20 +6,17 @@
   "configurations": [
     {
       "name": "androidapp_flutter",
-      "cwd": "androidapp_flutter",
       "request": "launch",
       "type": "dart"
     },
     {
       "name": "androidapp_flutter (profile mode)",
-      "cwd": "androidapp_flutter",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
       "name": "androidapp_flutter (release mode)",
-      "cwd": "androidapp_flutter",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"
