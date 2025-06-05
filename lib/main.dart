@@ -1,6 +1,6 @@
-import 'package:androidapp_flutter/news.dart';
-import 'package:androidapp_flutter/people_list.dart';
-import 'package:androidapp_flutter/map.dart';
+import 'news.dart';
+import 'people_list.dart';
+import 'map.dart';
 import 'package:flutter/material.dart';
 import 'authors_page.dart';
 
