@@ -28,18 +28,16 @@ jobs:
         run: flutter config --no-analytics
 
       - name: Install dependencies
-        working-directory: androidapp_flutter
         run: flutter pub get
 
       - name: Build APK
-        working-directory: androidapp_flutter
         run: flutter build apk --release
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: androidapp_flutter/build/app/outputs/flutter-apk/app-release.apk
+          files: build/app/outputs/flutter-apk/app-release.apk
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

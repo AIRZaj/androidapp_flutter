@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
-  http: ^1.1.0
-  cached_network_image: ^3.3.0
+  cupertino_icons: ^1.0.6
+  http: ^1.2.0
+  cached_network_image: ^3.3.1
   photo_view: ^0.14.0
   url_launcher: ^6.2.5
   location: ^6.0.2
@@ -19,7 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 flutter:
   uses-material-design: true
