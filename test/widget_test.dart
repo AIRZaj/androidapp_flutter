@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:uam_contacts/main.dart';
 
 void main() {
-  testWidgets('App should render without crashing', (WidgetTester tester) async {
+  testWidgets('App should render without crashing',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
 
     // There should be at least one Scaffold (the main one)
@@ -12,7 +13,8 @@ void main() {
     expect(find.byType(BottomNavigationBar), findsOneWidget);
   });
 
-  testWidgets('Bottom navigation should have 4 items', (WidgetTester tester) async {
+  testWidgets('Bottom navigation should have 4 items',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
 
     // Check for the labels of the navigation items
@@ -27,4 +29,4 @@ void main() {
     );
     expect(bottomNavBar.items.length, 4);
   });
-} 
+}
