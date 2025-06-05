@@ -103,21 +103,7 @@ class _PostListScreenState extends State<PostListScreen> {
         List jsonData = json.decode(response.body);
         return jsonData.map((item) => Post.fromJson(item)).toList();
       } else {
-        // Return 10 mock data records in case of error
-        return List.generate(
-            10,
-            (index) => Post.fromJson({
-                  'id': index,
-                  'imie': 'Mock Imie $index',
-                  'nazwisko': 'Mock Nazwisko $index',
-                  'pokoj': 'Mock Pokoj $index',
-                  'tytul': 'Mock Tytul $index',
-                  'telefon': 'Mock Telefon $index',
-                  'budynek': 'Mock Budynek $index',
-                  'mail': 'Mock Mail $index',
-                  'konsultacje': 'Mock Konsultacje $index',
-                  'link_do_serwisu_usos': 'Mock Link $index',
-                }));
+        return [];
       }
     }
   }
@@ -193,8 +179,8 @@ class _PostListScreenState extends State<PostListScreen> {
                   itemBuilder: (context, index) {
                     final post = _filteredPosts[index];
                     return Container(
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 4.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade300),
                         borderRadius: BorderRadius.circular(8.0),
