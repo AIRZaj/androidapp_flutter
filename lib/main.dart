@@ -32,24 +32,28 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
           elevation: 0,
         ),
-        cardTheme: CardThemeData(
+        cardTheme: const CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF003366), // UAM niebieski
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+        elevatedButtonTheme: const ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor:
+                WidgetStatePropertyAll(Color(0xFF003366)), // UAM niebieski
+            foregroundColor: WidgetStatePropertyAll(Colors.white),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
           ),
         ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF003366), // UAM niebieski
+        textButtonTheme: const TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor:
+                WidgetStatePropertyAll(Color(0xFF003366)), // UAM niebieski
           ),
         ),
         textTheme: const TextTheme(
@@ -77,7 +81,7 @@ class MyApp extends StatelessWidget {
         ),
         menuTheme: const MenuThemeData(
           style: MenuStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.white),
+            backgroundColor: WidgetStatePropertyAll(Colors.white),
           ),
         ),
       ),
@@ -96,11 +100,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const PostListScreen(),
-    const MapScreen(),
-    const NewsScreen(),
-    const AuthorsPage(),
+  final List<Widget> _pages = const [
+    PostListScreen(),
+    MapScreen(),
+    NewsScreen(),
+    AuthorsPage(),
   ];
 
   void _onItemTapped(int index) {
