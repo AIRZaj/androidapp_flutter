@@ -1,8 +1,8 @@
-import 'news.dart';
-import 'people_list.dart';
-import 'map.dart';
+import 'package:uam_contacts/news.dart';
+import 'package:uam_contacts/people_list.dart';
+import 'package:uam_contacts/map.dart';
 import 'package:flutter/material.dart';
-import 'authors_page.dart';
+import 'package:uam_contacts/authors_page.dart';
 
 void main() {
   runApp(const MyApp());
