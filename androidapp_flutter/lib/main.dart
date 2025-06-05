@@ -3,8 +3,16 @@ import 'package:androidapp_flutter/people_list.dart';
 import 'package:androidapp_flutter/map.dart';
 import 'package:flutter/material.dart';
 import 'authors_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'services/notification_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  final notificationService = NotificationService();
+  await notificationService.initialize();
+
   runApp(const MyApp());
 }
 
